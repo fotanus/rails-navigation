@@ -1,13 +1,9 @@
-RailsView = require './rails-view'
-
 module.exports =
-  railsView: null
-
   activate: (state) ->
-    @railsView = new RailsView(state.railsViewState)
+    true
 
   deactivate: ->
-    @railsView.destroy()
+    true
 
   serialize: ->
-    railsViewState: @railsView.serialize()
+    true
