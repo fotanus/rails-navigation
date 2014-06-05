@@ -26,3 +26,7 @@ describe "Navigation", ->
     it "modify migration", ->
       file = "/home/foo/work/project/db/migrate/123123_add_my_attribute_to_users.rb"
       expect(Navigation.getModelName(file)).toBe "user"
+
+  describe "modelFilePath", ->
+    it "returns the file path for a given model", ->
+      expect(Navigation.modelFilePath("user")).toBe "app/models/user.rb"

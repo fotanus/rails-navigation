@@ -6,6 +6,10 @@ AR = require './active-record'
 module.exports =
 class Navigation
 
+  # Given a model, returns the file path for that model.
+  @modelFilePath: (model) ->
+    "app/models/#{model}.rb"
+
   # This is the base method used to navigational pourposes.
   # It returns the model name from the current file.
   @getModelName: (file) ->

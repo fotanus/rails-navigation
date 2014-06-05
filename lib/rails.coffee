@@ -1,9 +1,13 @@
+Navigation = require './navigation'
+
 module.exports =
   activate: (state) ->
-    true
+    atom.workspaceView.command "rails:go-to-model", @goToModel
 
-  deactivate: ->
-    true
-
-  serialize: ->
-    true
+  goToModel: ->
+    activeEditor = atom.workspace.getActiveEditor()
+    if activeEditor != undefined
+      modelName = Navigation.getModelName activeEditor.getPath()
+      targetFile = Navigation.modelFilePath modelName
+      waitsForPromise ->
+        promise = atom.workspaceView.open(targetFile)
