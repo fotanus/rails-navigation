@@ -1,0 +1,16 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  '.overlayer':
+      'Enable rails': 'rails:toggle'
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'rails'
+      'submenu': [
+        { 'label': 'Toggle', 'command': 'rails:toggle' }
+      ]
+    ]
+  }
+]

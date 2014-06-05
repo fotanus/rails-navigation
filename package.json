@@ -1,0 +1,14 @@
+{
+  "name": "rails",
+  "main": "./lib/rails",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "activationEvents": ["rails:toggle"],
+  "repository": "https://github.com/atom/rails",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+  }
+}
