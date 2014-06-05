@@ -3,7 +3,10 @@
   "main": "./lib/rails",
   "version": "0.0.1",
   "description": "Tools for a happier rails development",
-  "activationEvents": ["rails:go-to-model"],
+  "activationEvents": [
+    "rails:go-to-model",
+    "rails:go-to-controller"
+  ],
   "repository": "https://github.com/fotanus/rails",
   "license": "MIT",
   "engines": {

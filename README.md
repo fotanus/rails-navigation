@@ -2,9 +2,14 @@
 
 Tools for a happier Rails development
 
+## DONE
+
+* Go to model
+* Go to controller
+
+
 ## TODO
 
-* Go to controller
 * Go to view
 * Go to test
 * Go to migration

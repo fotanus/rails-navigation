@@ -10,3 +10,7 @@ describe "ActiveRecord", ->
 
     it "returns the word if not ending with s", ->
       expect(ActiveRecord.singularize("user")).toBe("user")
+
+  describe "pluralize", ->
+    it "append 's'", ->
+      expect(ActiveRecord.pluralize("test")).toBe("tests")

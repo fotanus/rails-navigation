@@ -11,3 +11,7 @@ class ActiveRecord
         match[1]
       else
         name
+
+    # Given a singular word, returns the plural.
+    @pluralize: (name) ->
+      name + 's'
