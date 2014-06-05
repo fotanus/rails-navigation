@@ -15,6 +15,10 @@ class Navigation
   @controllerFilePath: (model) ->
     "app/controllers/#{AR.pluralize(model)}_controller.rb"
 
+  @helperFilePath: (model) ->
+    "app/helpers/#{AR.pluralize(model)}_helper.rb"
+
+
   # This is the base method used to navigational pourposes.
   # It returns the model name from the current file.
   @getModelName: (file) ->
@@ -42,6 +46,8 @@ class Navigation
           @modelFilePath(modelName)
         when "controller"
           @controllerFilePath(modelName)
+        when "helper"
+          @helperFilePath(modelName)
 
       promise = atom.workspaceView.open(targetFile)
 

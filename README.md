@@ -6,6 +6,7 @@ Tools for a happier Rails development
 
 * Go to model
 * Go to controller
+* Go to helper
 
 
 ## TODO
@@ -13,5 +14,4 @@ Tools for a happier Rails development
 * Go to view
 * Go to test
 * Go to migration
-* Go to helper
 * atom-vim support

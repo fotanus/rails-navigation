@@ -76,3 +76,13 @@ describe "Navigation", ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
           expect(currentPath).toMatch("app/controllers/users_controller.rb");
+
+      it "opens a new tab for the helper", ->
+        runs ->
+          Navigation.goTo "helper"
+          waitsForPromise ->
+            Navigation.promise()
+        runs ->
+          currentPath = atom.workspace.getActiveEditor().getPath()
+          expect(atom.workspace.getEditors().length).toEqual(2)
+          expect(currentPath).toMatch("app/helpers/users_helper.rb");

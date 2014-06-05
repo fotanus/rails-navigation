@@ -5,7 +5,8 @@
   "description": "Tools for a happier rails development",
   "activationEvents": [
     "rails:go-to-model",
-    "rails:go-to-controller"
+    "rails:go-to-controller",
+    "rails:go-to-helper"
   ],
   "repository": "https://github.com/fotanus/rails",
   "license": "MIT",
