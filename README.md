@@ -1,10 +1,9 @@
 # rails package for atom
 
-A set of tools for edit Rails projects with atom
+Tools for a happier Rails development
 
 ## TODO
 
-* Go to model
 * Go to controller
 * Go to view
 * Go to test
