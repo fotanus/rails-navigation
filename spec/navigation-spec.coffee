@@ -1,4 +1,5 @@
 {WorkspaceView} = require "atom"
+fs = require 'fs'
 Navigation = require '../lib/navigation'
 
 describe "Navigation", ->
@@ -33,12 +34,22 @@ describe "Navigation", ->
     it "returns the file path for a given model", ->
       expect(Navigation.modelFilePath("user")).toBe "app/models/user.rb"
 
-
   describe "controllerFilePath", ->
     it "returns the file path for a given model", ->
       expect(
         Navigation.controllerFilePath("user")
       ).toBe "app/controllers/users_controller.rb"
+
+  describe "migrationFilePath", ->
+    beforeEach ->
+      spyOn(fs, 'readdirSync').andReturn(
+        ["123123", "_users.rb", "123123_create_users.rb"]
+      )
+
+    it "returns the migration file path for a given model", ->
+      expect(
+        Navigation.migrationFilePath("user")
+      ).toBe "db/migrate/123123_create_users.rb"
 
 
   describe "goTo", ->

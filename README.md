@@ -7,11 +7,11 @@ Tools for a happier Rails development
 * Go to model
 * Go to controller
 * Go to helper
+* Go to migration
 
 
 ## TODO
 
 * Go to view
 * Go to test
-* Go to migration
 * atom-vim support

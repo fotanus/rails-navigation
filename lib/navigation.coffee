@@ -1,11 +1,12 @@
 AR = require './active-record'
+fs = require 'fs'
 
 # Navigation class contains methods used to navigate on
 # rails directory structure
 
 module.exports =
 class Navigation
-  
+
   # Given a model name, returns the file path for that model.
   @modelFilePath: (model) ->
     "app/models/#{model}.rb"
@@ -16,6 +17,16 @@ class Navigation
 
   @helperFilePath: (model) ->
     "app/helpers/#{AR.pluralize(model)}_helper.rb"
+
+  # Given a model name, returns the migration that creates it
+  # It only works for migrations with the name
+  # Returns undefined if not found
+  @migrationFilePath: (model) ->
+    pluralized_model = AR.pluralize(model)
+    files = fs.readdirSync atom.project.getPath() + "/db/migrate"
+    for file in files
+      if file.match new RegExp("[0-9]+_create_" + pluralized_model + "\.rb")
+        return "db/migrate/#{file}"
 
 
   # This is the base method used to navigational purposes.
@@ -47,5 +58,7 @@ class Navigation
           @controllerFilePath(modelName)
         when "helper"
           @helperFilePath(modelName)
+        when "migration"
+          @migrationFilePath(modelName)
 
       atom.workspaceView.open(targetFile)

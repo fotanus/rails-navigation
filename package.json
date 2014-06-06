@@ -6,7 +6,8 @@
   "activationEvents": [
     "rails:go-to-model",
     "rails:go-to-controller",
-    "rails:go-to-helper"
+    "rails:go-to-helper",
+    "rails:go-to-migration"
   ],
   "repository": "https://github.com/fotanus/rails",
   "license": "MIT",
