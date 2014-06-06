@@ -5,8 +5,7 @@ AR = require './active-record'
 
 module.exports =
 class Navigation
-  promise = null
-
+  
   # Given a model name, returns the file path for that model.
   @modelFilePath: (model) ->
     "app/models/#{model}.rb"
@@ -19,7 +18,7 @@ class Navigation
     "app/helpers/#{AR.pluralize(model)}_helper.rb"
 
 
-  # This is the base method used to navigational pourposes.
+  # This is the base method used to navigational purposes.
   # It returns the model name from the current file.
   @getModelName: (file) ->
     regexps = [
@@ -49,9 +48,4 @@ class Navigation
         when "helper"
           @helperFilePath(modelName)
 
-      promise = atom.workspaceView.open(targetFile)
-
-  # HACK: This method is only used to retrieve the promisse by the tests.
-  # promise is set on goTo method.
-  @promise: ->
-    promise
+      atom.workspaceView.open(targetFile)

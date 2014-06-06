@@ -54,9 +54,8 @@ describe "Navigation", ->
 
       it "opens a new tab for the module", ->
         runs ->
-          Navigation.goTo "model"
           waitsForPromise ->
-            Navigation.promise()
+            Navigation.goTo "model"
         runs ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
@@ -69,9 +68,8 @@ describe "Navigation", ->
 
       it "opens a new tab for the controller", ->
         runs ->
-          Navigation.goTo "controller"
           waitsForPromise ->
-            Navigation.promise()
+            Navigation.goTo "controller"
         runs ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
@@ -79,9 +77,8 @@ describe "Navigation", ->
 
       it "opens a new tab for the helper", ->
         runs ->
-          Navigation.goTo "helper"
           waitsForPromise ->
-            Navigation.promise()
+            Navigation.goTo "helper"
         runs ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
