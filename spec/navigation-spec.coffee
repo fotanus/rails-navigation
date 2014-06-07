@@ -6,27 +6,27 @@ CodeInspector = require '../lib/code-inspector'
 describe "Navigation", ->
 
   describe "getModelName", ->
-    it "model", ->
+    it "gets the model name from a model", ->
       file = "/home/foo/work/project/app/models/user.rb"
       expect(Navigation.getModelName(file)).toBe "user"
 
-    it "controller", ->
+    it "gets the model name from a controller", ->
       file = "/home/foo/work/project/app/controllers/users_controller.rb"
       expect(Navigation.getModelName(file)).toBe "user"
 
-    it "view", ->
+    it "gets the model name from a view", ->
       file = "/home/foo/work/project/app/views/users/index.html.erb"
       expect(Navigation.getModelName(file)).toBe "user"
 
-    it "helper", ->
+    it "gets the model name from a helper", ->
       file = "/home/foo/work/project/app/helpers/users_helper.rb"
       expect(Navigation.getModelName(file)).toBe "user"
 
-    it "create migration", ->
+    it "gets the model name from a create migration", ->
       file = "/home/foo/work/project/db/migrate/123123_create_users.rb"
       expect(Navigation.getModelName(file)).toBe "user"
 
-    it "modify migration", ->
+    it "gets the model name from a modify migration", ->
       file = "/home/foo/work/project/db/migrate/123123_add_my_attribute_to_users.rb"
       expect(Navigation.getModelName(file)).toBe "user"
 
