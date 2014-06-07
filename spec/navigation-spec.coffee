@@ -58,15 +58,25 @@ describe "Navigation", ->
       atom.workspace = atom.workspaceView.model
 
     describe "when an action file is open", ->
-
-      it "gets the view from the filename", ->
-        editor = null
+      beforeEach ->
         runs ->
           waitsForPromise ->
             atom.workspace.open("/app/views/users/index.html.erb")
+      it "gets the view from the filename", ->
         runs ->
           editor = atom.workspace.getEditors()[0]
           expect(Navigation.getActionName(editor)).toBe "index"
+
+    describe "When can't discover the action name", ->
+      beforeEach ->
+        runs ->
+          waitsForPromise ->
+            atom.workspace.open("README.md")
+      it "returns null", ->
+        runs ->
+          editor = atom.workspace.getEditors()[0]
+          expect(Navigation.getActionName(editor)).toBe null
+
 
 
   describe "goTo", ->
