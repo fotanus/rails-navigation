@@ -110,3 +110,20 @@ describe "Navigation", ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
           expect(currentPath).toMatch("app/helpers/users_helper.rb");
+
+    describe "When there is no file open", ->
+      it "fails", ->
+        waitsForPromise {shouldReject: true}, ->
+          Navigation.goTo "controller"
+
+    # TODO: Why this test won't pass?
+    xdescribe "When can't decide the model", ->
+      beforeEach ->
+        runs ->
+          waitsForPromise ->
+            atom.workspace.open("README.md")
+
+      it "fails", ->
+        runs ->
+          waitsForPromise {shouldReject: true}, ->
+            Navigation.goTo "controller"

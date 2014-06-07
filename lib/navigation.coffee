@@ -1,5 +1,6 @@
 AR = require './active-record'
 fs = require 'fs'
+q = require 'q'
 
 # Navigation class contains methods used to navigate on
 # rails directory structure
@@ -55,27 +56,33 @@ class Navigation
       if match = file.match regexp
         return AR.singularize(match[1])
 
+
   # Given an editor, try to find an action name if in one applicable file.
   @getActionName: (editor) ->
     filePath = editor.getPath()
-    if match = filePath.match viewFileMatcher
-      match[2]
+    if filePath
+      if match = filePath.match viewFileMatcher
+        return match[2]
+    null
 
 
   # Acordingly to the selected Editor and the file path function passed as
   # parameter, this method opens a new tab.
   @goTo: (fileKind) ->
-    if editor = atom.workspace.getActiveEditor()
-      modelName = Navigation.getModelName editor.getPath()
+    editor = atom.workspace.getActiveEditor()
+    return q.reject("No active editorade") unless editor
 
-      targetFile = switch fileKind
-        when "model"
-          @modelFilePath(modelName)
-        when "controller"
-          @controllerFilePath(modelName)
-        when "helper"
-          @helperFilePath(modelName)
-        when "migration"
-          @migrationFilePath(modelName)
+    modelName = Navigation.getModelName editor.getPath()
+    return q.reject("Can't find out model") unless modelName
 
-      atom.workspaceView.open(targetFile)
+    targetFile = switch fileKind
+      when "model"
+        @modelFilePath(modelName)
+      when "controller"
+        @controllerFilePath(modelName)
+      when "helper"
+        @helperFilePath(modelName)
+      when "migration"
+        @migrationFilePath(modelName)
+
+    atom.workspaceView.open(targetFile)
