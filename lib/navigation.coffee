@@ -24,7 +24,7 @@ class Navigation
   @controllerFilePath: (model) ->
     "app/controllers/#{AR.pluralize(model)}_controller.rb"
 
-  # Given a model name, returns the file path for the respective helper 
+  # Given a model name, returns the file path for the respective helper
   @helperFilePath: (model) ->
     "app/helpers/#{AR.pluralize(model)}_helper.rb"
 
