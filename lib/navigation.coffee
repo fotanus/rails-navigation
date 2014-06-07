@@ -7,6 +7,8 @@ fs = require 'fs'
 module.exports =
 class Navigation
 
+  # Regular expressions used to match file type that is being used. Returns the
+  # model name, pluralized or not.
   modelFileMatcher = /\/models\/(\w+)\.rb$/
   controllerFileMatcher = /\/controllers\/(\w+)_controller\.rb$/
   viewFileMatcher = /\/views\/(\w+)\/.*rb$/
@@ -22,6 +24,7 @@ class Navigation
   @controllerFilePath: (model) ->
     "app/controllers/#{AR.pluralize(model)}_controller.rb"
 
+  # Given a model name, returns the file path for the respective helper 
   @helperFilePath: (model) ->
     "app/helpers/#{AR.pluralize(model)}_helper.rb"
 
