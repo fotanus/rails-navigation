@@ -52,11 +52,27 @@ describe "Navigation", ->
       ).toBe "db/migrate/123123_create_users.rb"
 
 
+  describe "getActionName", ->
+    beforeEach ->
+      atom.workspaceView = new WorkspaceView()
+      atom.workspace = atom.workspaceView.model
+
+    describe "when an action file is open", ->
+
+      it "gets the view from the filename", ->
+        editor = null
+        runs ->
+          waitsForPromise ->
+            atom.workspace.open("/app/views/users/index.html.erb")
+        runs ->
+          editor = atom.workspace.getEditors()[0]
+          expect(Navigation.getActionName(editor)).toBe "index"
+
+
   describe "goTo", ->
     beforeEach ->
       atom.workspaceView = new WorkspaceView()
       atom.workspace = atom.workspaceView.model
-      atom.packages.activatePackage("rails")
 
     describe "When controller is currently selected", ->
       beforeEach ->

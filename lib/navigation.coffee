@@ -11,7 +11,7 @@ class Navigation
   # model name, pluralized or not.
   modelFileMatcher = /\/models\/(\w+)\.rb$/
   controllerFileMatcher = /\/controllers\/(\w+)_controller\.rb$/
-  viewFileMatcher = /\/views\/(\w+)\/.*rb$/
+  viewFileMatcher = /\/views\/(\w+)\/(.+)\.\w+\.\w+$/
   helperFileMatcher = /\/helpers\/(\w+)_helper\.rb$/
   migrationCreateFileMatcher = /\/migrate\/[0-9]+_create_(\w+)\.rb$/
   migrationModifyFilematcher = /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
@@ -54,6 +54,12 @@ class Navigation
     for regexp in regexps
       if match = file.match regexp
         return AR.singularize(match[1])
+
+  # Given an editor, try to find an action name if in one applicable file.
+  @getActionName: (editor) ->
+    filePath = editor.getPath()
+    if match = filePath.match viewFileMatcher
+      match[2]
 
 
   # Acordingly to the selected Editor and the file path function passed as
