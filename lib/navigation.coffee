@@ -7,6 +7,13 @@ fs = require 'fs'
 module.exports =
 class Navigation
 
+  modelFileMatcher = /\/models\/(\w+)\.rb$/
+  controllerFileMatcher = /\/controllers\/(\w+)_controller\.rb$/
+  viewFileMatcher = /\/views\/(\w+)\/.*rb$/
+  helperFileMatcher = /\/helpers\/(\w+)_helper\.rb$/
+  migrationCreateFileMatcher = /\/migrate\/[0-9]+_create_(\w+)\.rb$/
+  migrationModifyFilematcher = /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
+
   # Given a model name, returns the file path for that model.
   @modelFilePath: (model) ->
     "app/models/#{model}.rb"
@@ -33,17 +40,18 @@ class Navigation
   # It returns the model name from the current file.
   @getModelName: (file) ->
     regexps = [
-      /\/models\/(\w+)\.rb$/,
-      /\/controllers\/(\w+)_controller\.rb$/,
-      /\/views\/(\w+)\/.*rb$/,
-      /\/helpers\/(\w+)_helper\.rb$/,
-      /\/migrate\/[0-9]+_create_(\w+)\.rb$/,
-      /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
+      modelFileMatcher,
+      controllerFileMatcher,
+      viewFileMatcher,
+      helperFileMatcher,
+      migrationCreateFileMatcher,
+      migrationModifyFilematcher
     ]
 
     for regexp in regexps
       if match = file.match regexp
         return AR.singularize(match[1])
+
 
   # Acordingly to the selected Editor and the file path function passed as
   # parameter, this method opens a new tab.
