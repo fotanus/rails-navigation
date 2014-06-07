@@ -1,6 +1,7 @@
 {WorkspaceView} = require "atom"
 fs = require 'fs'
 Navigation = require '../lib/navigation'
+CodeInspector = require '../lib/code-inspector'
 
 describe "Navigation", ->
 
@@ -57,15 +58,31 @@ describe "Navigation", ->
       atom.workspaceView = new WorkspaceView()
       atom.workspace = atom.workspaceView.model
 
-    describe "when an action file is open", ->
+    describe "when an view file is open", ->
       beforeEach ->
         runs ->
           waitsForPromise ->
             atom.workspace.open("/app/views/users/index.html.erb")
-      it "gets the view from the filename", ->
+      it "gets the action from the filename", ->
         runs ->
           editor = atom.workspace.getEditors()[0]
           expect(Navigation.getActionName(editor)).toBe "index"
+
+    describe "when an controller file is open", ->
+      beforeEach ->
+        runs ->
+          waitsForPromise ->
+            atom.workspace.open("/app/controllers/users_controller.rb")
+
+      describe "When the cursor is on the index action", ->
+        it "gets the action from code inspector", ->
+          runs ->
+            spyOn(CodeInspector, 'controllerCurrentAction').andReturn(
+              'code_inspector_method'
+            )
+            editor = atom.workspace.getEditors()[0]
+            expect(Navigation.getActionName(editor)).toBe "code_inspector_method"
+
 
     describe "When can't discover the action name", ->
       beforeEach ->

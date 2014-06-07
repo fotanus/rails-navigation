@@ -1,4 +1,5 @@
 AR = require './active-record'
+CodeInspector = require './code-inspector'
 fs = require 'fs'
 q = require 'q'
 
@@ -63,6 +64,8 @@ class Navigation
     if filePath
       if match = filePath.match viewFileMatcher
         return match[2]
+      if filePath.match controllerFileMatcher
+        return CodeInspector.controllerCurrentAction(editor)
     null
 
 
