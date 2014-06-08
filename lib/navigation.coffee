@@ -14,6 +14,7 @@ class Navigation
   modelFileMatcher = /\/models\/(\w+)\.rb$/
   controllerFileMatcher = /\/controllers\/(\w+)_controller\.rb$/
   viewFileMatcher = /\/views\/(\w+)\/(.+)\.\w+\.\w+$/
+  legacyViewFileMatcher = /\/views\/(\w+)\/(.+)\.\w+$/
   helperFileMatcher = /\/helpers\/(\w+)_helper\.rb$/
   migrationCreateFileMatcher = /\/migrate\/[0-9]+_create_(\w+)\.rb$/
   migrationModifyFilematcher = /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
@@ -34,11 +35,22 @@ class Navigation
   # It only works for migrations with the name
   # Returns undefined if not found
   @migrationFilePath: (model) ->
-    pluralized_model = AR.pluralize(model)
+    pluralizedModel = AR.pluralize(model)
     files = fs.readdirSync atom.project.getPath() + "/db/migrate"
     for file in files
-      if file.match new RegExp("[0-9]+_create_" + pluralized_model + "\.rb")
+      if file.match new RegExp("[0-9]+_create_" + pluralizedModel + "\.rb")
         return "db/migrate/#{file}"
+
+  # Given the model name and an action, returns the path for the
+  # default view file for this action.
+  @viewFilePath: (model, action) ->
+    pluralizedModel = AR.pluralize(model)
+    modelViewsPath = "#{atom.project.getPath()}/app/views/#{pluralizedModel}"
+    files = fs.readdirSync modelViewsPath
+    for file in files
+      if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
+        return "app/views/#{pluralizedModel}/#{file}"
+    null
 
 
   # This is the base method used to navigational purposes.
@@ -48,6 +60,7 @@ class Navigation
       modelFileMatcher,
       controllerFileMatcher,
       viewFileMatcher,
+      legacyViewFileMatcher,
       helperFileMatcher,
       migrationCreateFileMatcher,
       migrationModifyFilematcher
@@ -64,6 +77,8 @@ class Navigation
     if filePath
       if match = filePath.match viewFileMatcher
         return match[2]
+      if match = filePath.match legacyViewFileMatcher
+        return match[2]
       if filePath.match controllerFileMatcher
         return CodeInspector.controllerCurrentAction(editor)
     null
@@ -78,6 +93,10 @@ class Navigation
     modelName = Navigation.getModelName editor.getPath()
     return q.reject("Can't find out model") unless modelName
 
+    actionName = Navigation.getActionName(editor)
+    if !actionName and fileKind == "view"
+      return q.reject("Don't know what action to use")
+
     targetFile = switch fileKind
       when "model"
         @modelFilePath(modelName)
@@ -87,5 +106,7 @@ class Navigation
         @helperFilePath(modelName)
       when "migration"
         @migrationFilePath(modelName)
+      when "view"
+        @viewFilePath(modelName, actionName)
 
     atom.workspaceView.open(targetFile)

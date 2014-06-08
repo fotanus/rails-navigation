@@ -18,6 +18,10 @@ describe "Navigation", ->
       file = "/home/foo/work/project/app/views/users/index.html.erb"
       expect(Navigation.getModelName(file)).toBe "user"
 
+    it "gets the model name from an old style view", ->
+      file = "/home/foo/work/project/app/views/users/index.rhtml"
+      expect(Navigation.getModelName(file)).toBe "user"
+
     it "gets the model name from a helper", ->
       file = "/home/foo/work/project/app/helpers/users_helper.rb"
       expect(Navigation.getModelName(file)).toBe "user"
@@ -51,6 +55,42 @@ describe "Navigation", ->
       expect(
         Navigation.migrationFilePath("user")
       ).toBe "db/migrate/123123_create_users.rb"
+
+  describe "viewFilePath", ->
+    describe "when template exists", ->
+      beforeEach ->
+        spyOn(fs, 'readdirSync').andReturn(
+          ["destroy.html.erb", "index.html.erb", "create.html.erb"]
+        )
+
+      it "returns the view file for the given model/action", ->
+        expect(
+          Navigation.viewFilePath("user", "index")
+        ).toBe "app/views/users/index.html.erb"
+
+    describe "when old style template exists", ->
+      beforeEach ->
+        spyOn(fs, 'readdirSync').andReturn(
+          ["destroy.html.erb", "index.rhtml", "create.html.erb"]
+        )
+
+      it "returns the view file for the given model/action", ->
+        expect(
+          Navigation.viewFilePath("user", "index")
+        ).toBe "app/views/users/index.rhtml"
+
+    describe "when template does not exist", ->
+      beforeEach ->
+        spyOn(fs, 'readdirSync').andReturn(
+          ["destroy.html.erb", "create.html.erb"]
+        )
+
+      #TODO: We could use a better behaviour here.
+      it "returns null", ->
+        expect(
+          Navigation.viewFilePath("user", "index")
+        ).toBe null
+
 
 
   describe "getActionName", ->

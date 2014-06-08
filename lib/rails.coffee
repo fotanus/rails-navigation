@@ -8,6 +8,7 @@ module.exports =
     atom.workspaceView.command "rails:go-to-controller", @goToController
     atom.workspaceView.command "rails:go-to-helper", @goToHelper
     atom.workspaceView.command "rails:go-to-migration", @goToMigration
+    atom.workspaceView.command "rails:go-to-view", @goToView
 
   goToModel: ->
     Navigation.goTo "model"
@@ -20,3 +21,6 @@ module.exports =
 
   goToMigration: ->
     Navigation.goTo "migration"
+
+  goToView: ->
+    Navigation.goTo "view"

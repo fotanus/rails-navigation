@@ -8,10 +8,10 @@ Tools for a happier Rails development
 * Go to controller
 * Go to helper
 * Go to migration
+* Go to view
 
 
 ## TODO
 
-* Go to view
 * Go to test
 * atom-vim support
