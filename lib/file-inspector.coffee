@@ -56,15 +56,14 @@ class FileInspector
   # default view file for this action.
   @viewFilePath: (model, action) ->
     pluralizedModel = AR.pluralize(model)
-    modelViewsPath = "#{atom.project.getPath()}/app/views/#{pluralizedModel}"
-    files = fs.readdirSync modelViewsPath
-    bestFound = null
+    pluralizedViewsPath = "app/views/#{pluralizedModel}"
+    singularViewsPath = "app/views/#{model}"
+    viewsPath = @firstFileThatExists(pluralizedViewsPath, singularViewsPath)
+    files = fs.readdirSync @fullPath(viewsPath)
     for file in files
       if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
-        return "app/views/#{pluralizedModel}/#{file}"
-      if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
-        bestFound = "app/views/#{model}/#{file}"
-    bestFound
+        return "#{viewsPath}/#{file}"
+    null
 
   # Given two file paths, returns one that exists. The first one has priority
   # over the second one. If no file exists, return null

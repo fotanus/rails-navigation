@@ -49,47 +49,27 @@ describe "FileInspector", ->
       ).toBe "app/controllers/users_controller.rb"
 
   describe "migrationFilePath", ->
-    beforeEach ->
-      spyOn(fs, 'readdirSync').andReturn(
-        ["123123", "_users.rb", "123123_create_users.rb"]
-      )
-
     it "returns the migration file path for a given model", ->
       expect(
         FileInspector.migrationFilePath("user")
-      ).toBe "db/migrate/123123_create_users.rb"
+      ).toBe "db/migrate/20140608214510_create_users.rb"
 
   describe "viewFilePath", ->
     describe "when template exists", ->
-      beforeEach ->
-        spyOn(fs, 'readdirSync').andReturn(
-          ["destroy.html.erb", "index.html.erb", "create.html.erb"]
-        )
-
       it "returns the view file for the given model/action", ->
         expect(
           FileInspector.viewFilePath("user", "index")
         ).toBe "app/views/users/index.html.erb"
 
     describe "when old style template exists", ->
-      beforeEach ->
-        spyOn(fs, 'readdirSync').andReturn(
-          ["destroy.html.erb", "index.rhtml", "create.html.erb"]
-        )
-
       it "returns the view file for the given model/action", ->
         expect(
-          FileInspector.viewFilePath("user", "index")
-        ).toBe "app/views/users/index.rhtml"
+          FileInspector.viewFilePath("user", "legacy_rhtml")
+        ).toBe "app/views/users/legacy_rhtml.rhtml"
 
+    #TODO: We could use a better behaviour here.
     describe "when template does not exist", ->
-      beforeEach ->
-        spyOn(fs, 'readdirSync').andReturn(
-          ["destroy.html.erb", "create.html.erb"]
-        )
-
-      #TODO: We could use a better behaviour here.
       it "returns null", ->
         expect(
-          FileInspector.viewFilePath("user", "index")
+          FileInspector.viewFilePath("user", "no_template")
         ).toBe null
