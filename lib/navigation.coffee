@@ -12,16 +12,7 @@ class Navigation
 
   # Given an editor, try to find an action name if in one applicable file.
   @getActionName: (editor) ->
-    filePath = editor.getPath()
-    if filePath
-      if match = filePath.match FileInspector.viewFileMatcher()
-        return match[2]
-      if match = filePath.match FileInspector.legacyViewFileMatcher()
-        return match[2]
-      if filePath.match FileInspector.controllerFileMatcher()
-        return CodeInspector.controllerCurrentAction(editor)
-    null
-
+    FileInspector.getActionName(editor) || CodeInspector.getActionName(editor)
 
   # Acordingly to the selected Editor and the file path function passed as
   # parameter, this method opens a new tab.

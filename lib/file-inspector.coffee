@@ -11,12 +11,16 @@ class FileInspector
   # Regular expressions used to match file type that is being used. Returns the
   # model name, pluralized or not.
   modelFileMatcher = /\/models\/(\w+)\.rb$/
-  @controllerFileMatcher: -> /\/controllers\/(\w+)_controller\.rb$/
-  @viewFileMatcher: -> /\/views\/(\w+)\/(.+)\.\w+\.\w+$/
-  @legacyViewFileMatcher: -> /\/views\/(\w+)\/(.+)\.\w+$/
+  controllerFileMatcher = /\/controllers\/(\w+)_controller\.rb$/
+  viewFileMatcher = /\/views\/(\w+)\/(.+)\.\w+\.\w+$/
+  legacyViewFileMatcher = /\/views\/(\w+)\/(.+)\.\w+$/
   helperFileMatcher = /\/helpers\/(\w+)_helper\.rb$/
   migrationCreateFileMatcher = /\/migrate\/[0-9]+_create_(\w+)\.rb$/
   migrationModifyFilematcher = /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
+
+  # Returns wheter a file path is a controller or not
+  @isController: (file) ->
+    Boolean(file.match controllerFileMatcher)
 
   # Given a model name, returns the file path for that model.
   @modelFilePath: (model) ->
@@ -57,9 +61,9 @@ class FileInspector
   @getModelName: (file) ->
     regexps = [
       modelFileMatcher,
-      @controllerFileMatcher(),
-      @viewFileMatcher(),
-      @legacyViewFileMatcher(),
+      controllerFileMatcher,
+      viewFileMatcher,
+      legacyViewFileMatcher,
       helperFileMatcher,
       migrationCreateFileMatcher,
       migrationModifyFilematcher
@@ -68,3 +72,14 @@ class FileInspector
     for regexp in regexps
       if match = file.match regexp
         return AR.singularize(match[1])
+
+  # When possible to define the action based on the file name, returns it.
+  # Returns null otherwise.
+  @getActionName: (editor) ->
+    filePath = editor.getPath()
+    if filePath
+      if match = filePath.match viewFileMatcher
+        return match[2]
+      if match = filePath.match legacyViewFileMatcher
+        return match[2]
+    null

@@ -1,7 +1,16 @@
+FileInspector = require "./file-inspector"
 # CodeInspector is responsible to respond to queries on the source code
 
 module.exports =
 class CodeInspector
+
+  # If possible to known the action name based on the cursor location, returns
+  # it. Returns null otherwise.
+  @getActionName: (editor) ->
+    filePath = editor.getPath()
+    if FileInspector.isController(filePath)
+      return CodeInspector.controllerCurrentAction(editor)
+    null
 
   # For a given editor, returns the name of the action on which the cursor
   # is currently in
