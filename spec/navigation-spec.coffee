@@ -4,11 +4,12 @@ Navigation = require '../lib/navigation'
 CodeInspector = require '../lib/code-inspector'
 
 describe "Navigation", ->
-  describe "getActionName", ->
-    beforeEach ->
-      atom.workspaceView = new WorkspaceView()
-      atom.workspace = atom.workspaceView.model
+  beforeEach ->
+    atom.workspaceView = new WorkspaceView()
+    atom.workspace = atom.workspaceView.model
+    atom.project.setPath("#{atom.project.getPath()}/test_project")
 
+  describe "getActionName", ->
     describe "when an view file is open", ->
       beforeEach ->
         runs ->
@@ -48,10 +49,6 @@ describe "Navigation", ->
 
 
   describe "goTo", ->
-    beforeEach ->
-      atom.workspaceView = new WorkspaceView()
-      atom.workspace = atom.workspaceView.model
-
     describe "When controller is currently selected", ->
       beforeEach ->
         waitsForPromise ->

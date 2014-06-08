@@ -28,11 +28,15 @@ class FileInspector
 
   # Given a model name, returns the file path for the respective controller
   @controllerFilePath: (model) ->
-    "app/controllers/#{AR.pluralize(model)}_controller.rb"
+    pluralFilePath = "app/controllers/#{AR.pluralize(model)}_controller.rb"
+    singularFilePath = "app/controllers/#{model}_controller.rb"
+    @firstFileThatExists(pluralFilePath, singularFilePath)
 
   # Given a model name, returns the file path for the respective helper
   @helperFilePath: (model) ->
-    "app/helpers/#{AR.pluralize(model)}_helper.rb"
+    pluralFilePath = "app/helpers/#{AR.pluralize(model)}_helper.rb"
+    singularFilePath = "app/helpers/#{model}_helper.rb"
+    @firstFileThatExists(pluralFilePath, singularFilePath)
 
   # Given a model name, returns the migration that creates it
   # It only works for migrations with the name
@@ -40,9 +44,13 @@ class FileInspector
   @migrationFilePath: (model) ->
     pluralizedModel = AR.pluralize(model)
     files = fs.readdirSync atom.project.getPath() + "/db/migrate"
+    bestFound = null
     for file in files
       if file.match new RegExp("[0-9]+_create_" + pluralizedModel + "\.rb")
         return "db/migrate/#{file}"
+      if file.match new RegExp("[0-9]+_create_" + model + "\.rb")
+        bestFoud = "db/migrate/#{file}" unless bestFound
+    bestFile
 
   # Given the model name and an action, returns the path for the
   # default view file for this action.
@@ -50,11 +58,23 @@ class FileInspector
     pluralizedModel = AR.pluralize(model)
     modelViewsPath = "#{atom.project.getPath()}/app/views/#{pluralizedModel}"
     files = fs.readdirSync modelViewsPath
+    bestFound = null
     for file in files
       if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
         return "app/views/#{pluralizedModel}/#{file}"
-    null
+      if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
+        bestFound = "app/views/#{model}/#{file}"
+    bestFound
 
+  # Given two file paths, returns one that exists. The first one has priority
+  # over the second one. If no file exists, return null
+  @firstFileThatExists: (file1, file2) ->
+    if fs.existsSync(@fullPath(file1))
+      file1
+    else if fs.existsSync(@fullPath(file2))
+      file2
+    else
+      null
 
   # This is the base method used to navigational purposes.
   # It returns the model name from the current file.
@@ -83,3 +103,7 @@ class FileInspector
       if match = filePath.match legacyViewFileMatcher
         return match[2]
     null
+
+  # Gives full path for a partial path on the open project
+  @fullPath: (partialPath) ->
+    "#{atom.project.getPath()}/#{partialPath}"

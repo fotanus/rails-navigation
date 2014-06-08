@@ -3,6 +3,11 @@ fs = require 'fs'
 FileInspector = require '../lib/file-inspector'
 
 describe "FileInspector", ->
+  beforeEach ->
+    atom.workspaceView = new WorkspaceView()
+    atom.workspace = atom.workspaceView.model
+    atom.project.setPath("#{atom.project.getPath()}/test_project")
+
   describe "getModelName", ->
     it "gets the model name from a model", ->
       file = "/home/foo/work/project/app/models/user.rb"
