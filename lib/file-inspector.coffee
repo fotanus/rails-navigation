@@ -16,11 +16,31 @@ class FileInspector
   legacyViewFileMatcher = /\/views\/(\w+)\/(.+)\.\w+$/
   helperFileMatcher = /\/helpers\/(\w+)_helper\.rb$/
   migrationCreateFileMatcher = /\/migrate\/[0-9]+_create_(\w+)\.rb$/
-  migrationModifyFilematcher = /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
+  migrationModifyFileMatcher = /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
+  factoryFileMatcher = /\/factories\/(\w+).rb/
 
-  # Returns wheter a file path is a controller or not
+  # Regular expressions that matches any test file
+  specFileMatcher = /spec\/.*_spec\.rb/
+  testFileMatcher = /test\/.*_test\.rb/
+
+  # Regular expressions to extract information from test files
+  unitTestFileMatcher = /test\/unit\/(\w+)_test\.rb/
+  functionalTestFileMatcher = /test\/functional\/(\w+)_test\.rb/
+
+  modelSpecMatcher = /spec\/models\/(\w+)_spec.rb/
+  controllerSpecMatcher = /spec\/controllers\/(\w+)_spec\.rb/
+  viewSpecMatcher = /spec\/views\/(\w+)\/(\w+)\.\w+\.\w+_spec\.rb/
+  mailerSpecMatcher = /spec\/mailers\/(\w+)_spec.rb/
+  factoryMatcher = /factories\/(\w+)\.rb/
+
+
+  # Returns wheter a file path is a controller
   @isController: (file) ->
     Boolean(file.match controllerFileMatcher)
+
+  # Returns wheter a file path is from a test
+  @isTest: (file) ->
+    Boolean(file.match(specFileMatcher) || file.match(testFileMatcher))
 
   # Given a model name, returns the file path for that model.
   @modelFilePath: (model) ->
@@ -85,7 +105,7 @@ class FileInspector
       legacyViewFileMatcher,
       helperFileMatcher,
       migrationCreateFileMatcher,
-      migrationModifyFilematcher
+      migrationModifyFileMatcher
     ]
 
     for regexp in regexps

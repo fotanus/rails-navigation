@@ -54,3 +54,30 @@ describe "codeInspector", ->
 
     it "don't match a non-method declaration line", ->
       expect(CodeInspector.getMethodName("puts 'hello'")).toBe null
+
+  describe "getTestSubject", ->
+    it "matches a instance method test description", ->
+      expect(CodeInspector.getTestSubject("test '#my_method'")).toBe "my_method"
+
+    it "matches a instance method test description with double quotes", ->
+      expect(CodeInspector.getTestSubject('test "#my_method"')).toBe "my_method"
+
+    it "matches a class method test description", ->
+      expect(CodeInspector.getTestSubject('test ".my_method"')).toBe "my_method"
+
+    it "don't match a non-method declaration line", ->
+      expect(CodeInspector.getTestSubject("test 'any test'")).toBe null
+
+
+  describe "getSpecSubject", ->
+    it "matches a instance method spec description", ->
+      expect(CodeInspector.getSpecSubject("describe '#my_method'")).toBe "my_method"
+
+    it "matches a instance method spec description with double quotes", ->
+      expect(CodeInspector.getSpecSubject('describe "#my_method"')).toBe "my_method"
+
+    it "matches a class method spec description", ->
+      expect(CodeInspector.getSpecSubject('describe ".my_method"')).toBe "my_method"
+
+    it "don't match a non-method declaration line", ->
+      expect(CodeInspector.getSpecSubject("describe 'any spec'")).toBe null
