@@ -27,7 +27,15 @@ class Navigation
     if !actionName and fileKind == "view"
       return q.reject("Don't know what action to use")
 
-    targetFile = switch fileKind
+    targetFile = @getTargetFile(fileKind, modelName, actionName)
+    testSubject = CodeInspector.getCurrentSubject
+
+    atom.workspaceView.open(targetFile).then (resultingEditor) =>
+      CodeInspector.moveToSubject(resultingEditor, testSubject)
+
+  # Gets the target file which will be switched to
+  @getTargetFile: (fileKind, modelName, actionName) ->
+    switch fileKind
       when "model"
         FileInspector.modelFilePath(modelName)
       when "controller"
@@ -40,11 +48,3 @@ class Navigation
         FileInspector.viewFilePath(modelName, actionName)
       when "test"
         FileInspector.testFilePath(modelName, actionName)
-
-    testSubject
-    if FileInspector.isTest editor.getPath()
-      testSubject = CodeInspector.getCurrentSubject
-
-    editorPromise = atom.workspaceView.open(targetFile)
-    editorPromise.then (resultingEditor) =>
-      CodeInspector.moveToSubject(resultingEditor, testSubject)
