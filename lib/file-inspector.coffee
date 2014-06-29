@@ -85,6 +85,13 @@ class FileInspector
         return "#{viewsPath}/#{file}"
     null
 
+  # Given the model name and an action, returns the path for the
+  # test file for it.
+  @testFilePath: (model, action) ->
+    specFilePath = "spec/models/#{model}_spec.rb"
+    unitTestFilePath = "test/models/#{model}_test.rb"
+    return @firstFileThatExists(specFilePath, unitTestFilePath)
+
   # Given two file paths, returns one that exists. The first one has priority
   # over the second one. If no file exists, return null
   @firstFileThatExists: (file1, file2) ->
@@ -105,7 +112,9 @@ class FileInspector
       legacyViewFileMatcher,
       helperFileMatcher,
       migrationCreateFileMatcher,
-      migrationModifyFileMatcher
+      migrationModifyFileMatcher,
+      modelSpecMatcher,
+      controllerSpecMatcher,
     ]
 
     for regexp in regexps

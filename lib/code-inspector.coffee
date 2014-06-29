@@ -12,6 +12,19 @@ class CodeInspector
       return CodeInspector.controllerCurrentAction(editor)
     null
 
+  # Given a editor and a subject, move the curent cursor to the subject. Subject
+  # currently needs to be a function name.
+  @moveToSubject: (editor, subject) ->
+    textInLines = editor.getText().split("\n")
+    lineNumber = 0;
+    for line in textInLines
+      if line.match new RegExp("\\s*def\\s*(self\\.)?" + subject)
+        editor.setCursorScreenPosition([lineNumber, 0])
+        editor.moveCursorToBeginningOfNextWord()
+        return
+      lineNumber += 1
+
+
   # For a given editor, returns the name of the action on which the cursor
   # is currently in
   @controllerCurrentAction: (editor) ->
@@ -24,7 +37,7 @@ class CodeInspector
     null
 
   # Given a unit or function test::unit gets the current subject and action
-  @testCurrentSubject: (editor) ->
+  @getCurrentSubject: (editor) ->
     textInLines = editor.getText().split("\n")
     lineNumber = editor.getCursor().getBufferRow()
     while lineNumber > 0

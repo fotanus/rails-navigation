@@ -38,5 +38,13 @@ class Navigation
         FileInspector.migrationFilePath(modelName)
       when "view"
         FileInspector.viewFilePath(modelName, actionName)
+      when "test"
+        FileInspector.testFilePath(modelName, actionName)
 
-    atom.workspaceView.open(targetFile)
+    testSubject
+    if FileInspector.isTest editor.getPath()
+      testSubject = CodeInspector.getCurrentSubject
+
+    editorPromise = atom.workspaceView.open(targetFile)
+    editorPromise.then (resultingEditor) =>
+      CodeInspector.moveToSubject(resultingEditor, testSubject)

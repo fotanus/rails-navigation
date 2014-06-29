@@ -37,7 +37,6 @@ describe "FileInspector", ->
       file = "/home/foo/work/project/db/migrate/123123_add_my_attribute_to_users.rb"
       expect(FileInspector.getModelName(file)).toBe "user"
 
-
   describe "modelFilePath", ->
     it "returns the file path for a given model", ->
       expect(FileInspector.modelFilePath("user")).toBe "app/models/user.rb"
@@ -66,6 +65,19 @@ describe "FileInspector", ->
         expect(
           FileInspector.viewFilePath("user", "legacy_rhtml")
         ).toBe "app/views/users/legacy_rhtml.rhtml"
+
+  describe "testFilePath", ->
+    describe "when test unit exists", ->
+      it "returns its path", ->
+        expect(
+          FileInspector.testFilePath("user", undefined)
+        ).toBe "test/models/user_test.rb"
+
+    describe "when spec exists", ->
+      it "returns its path", ->
+        expect(
+          FileInspector.testFilePath("rspec_model", undefined)
+        ).toBe "spec/models/rspec_model_spec.rb"
 
     #TODO: We could use a better behaviour here.
     describe "when template does not exist", ->
