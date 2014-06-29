@@ -39,49 +39,43 @@ describe "FileInspector", ->
 
   describe "modelFilePath", ->
     it "returns the file path for a given model", ->
-      expect(FileInspector.modelFilePath("user")).toBe "app/models/user.rb"
+      FileInspector.modelFilePath("user").then (filePath) ->
+        expect(filePath).toBe "app/models/user.rb"
 
   describe "controllerFilePath", ->
     it "returns the file path for a given model", ->
-      expect(
-        FileInspector.controllerFilePath("user")
-      ).toBe "app/controllers/users_controller.rb"
+      FileInspector.controllerFilePath("user").then (filePath) ->
+        expect(filePath).toBe "app/controllers/users_controller.rb"
 
   describe "migrationFilePath", ->
     it "returns the migration file path for a given model", ->
-      expect(
-        FileInspector.migrationFilePath("user")
-      ).toBe "db/migrate/20140608214510_create_users.rb"
+      FileInspector.migrationFilePath("user").then (filePath) ->
+        expect(filePath).toBe "db/migrate/20140608214510_create_users.rb"
 
   describe "viewFilePath", ->
     describe "when template exists", ->
       it "returns the view file for the given model/action", ->
-        expect(
-          FileInspector.viewFilePath("user", "index")
-        ).toBe "app/views/users/index.html.erb"
+        FileInspector.viewFilePath("user", "index").then (filePath) ->
+          expect(filePath).toBe "app/views/users/index.html.erb"
 
     describe "when old style template exists", ->
       it "returns the view file for the given model/action", ->
-        expect(
-          FileInspector.viewFilePath("user", "legacy_rhtml")
-        ).toBe "app/views/users/legacy_rhtml.rhtml"
+        FileInspector.viewFilePath("user", "legacy_rhtml").then (filePath) ->
+          expect(filePath).toBe "app/views/users/legacy_rhtml.rhtml"
 
   describe "testFilePath", ->
     describe "when test unit exists", ->
       it "returns its path", ->
-        expect(
-          FileInspector.testFilePath("user", undefined)
-        ).toBe "test/models/user_test.rb"
+        FileInspector.testFilePath("user", undefined).then (filePath) ->
+          expect(filePath).toBe "test/models/user_test.rb"
 
     describe "when spec exists", ->
       it "returns its path", ->
-        expect(
-          FileInspector.testFilePath("rspec_model", undefined)
-        ).toBe "spec/models/rspec_model_spec.rb"
+        FileInspector.testFilePath("rspec_model", undefined).then (filePath) ->
+          expect(filePath).toBe "spec/models/rspec_model_spec.rb"
 
     #TODO: We could use a better behaviour here.
     describe "when template does not exist", ->
       it "returns null", ->
-        expect(
-          FileInspector.viewFilePath("user", "no_template")
-        ).toBe null
+        FileInspector.viewFilePath("user", "no_template").then (filePath) ->
+          expect(filePath).toBe null

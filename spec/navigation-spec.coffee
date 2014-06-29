@@ -46,8 +46,6 @@ describe "Navigation", ->
           editor = atom.workspace.getEditors()[0]
           expect(Navigation.getActionName(editor)).toBe null
 
-
-
   describe "goTo", ->
     describe "When controller is currently selected", ->
       beforeEach ->
@@ -95,7 +93,6 @@ describe "Navigation", ->
           expect(atom.workspace.getEditors().length).toEqual(2)
           expect(currentPath).toMatch("app/helpers/users_helper.rb");
 
-    # TODO: Why this test raises an exception?
     xdescribe "When there is no file open", ->
       it "fails", ->
         waitsForPromise {shouldReject: true}, =>

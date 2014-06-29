@@ -44,7 +44,8 @@ class FileInspector
 
   # Given a model name, returns the file path for that model.
   @modelFilePath: (model) ->
-    "app/models/#{model}.rb"
+    q.fcall ->
+      "app/models/#{model}.rb"
 
   # Given a model name, returns the file path for the respective controller
   @controllerFilePath: (model) ->
@@ -62,28 +63,43 @@ class FileInspector
   # It only works for migrations with the name
   # Returns undefined if not found
   @migrationFilePath: (model) ->
-    pluralizedModel = AR.pluralize(model)
-    files = fs.readdirSync atom.project.getPath() + "/db/migrate"
-    bestFound = null
-    for file in files
-      if file.match new RegExp("[0-9]+_create_" + pluralizedModel + "\.rb")
-        return "db/migrate/#{file}"
-      if file.match new RegExp("[0-9]+_create_" + model + "\.rb")
-        bestFoud = "db/migrate/#{file}" unless bestFound
-    bestFile
+    deffered = q.defer()
+    promise = fs.readdir atom.project.getPath() + "/db/migrate", (err, files) ->
+      if err
+        deffered.resolve(null)
+      else
+        pluralizedModel = AR.pluralize(model)
+        bestFound = null
+        for file in files
+          if file.match new RegExp("[0-9]+_create_" + pluralizedModel + "\.rb")
+            return "db/migrate/#{file}"
+          if file.match new RegExp("[0-9]+_create_" + model + "\.rb")
+            bestFoud = "db/migrate/#{file}" unless bestFound
+        deffered.resolve(bestFound)
+    deffered.promise
 
   # Given the model name and an action, returns the path for the
   # default view file for this action.
   @viewFilePath: (model, action) ->
+    deffered = q.defer()
     pluralizedModel = AR.pluralize(model)
     pluralizedViewsPath = "app/views/#{pluralizedModel}"
     singularViewsPath = "app/views/#{model}"
-    viewsPath = @firstFileThatExists(pluralizedViewsPath, singularViewsPath)
-    files = fs.readdirSync @fullPath(viewsPath)
-    for file in files
-      if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
-        return "#{viewsPath}/#{file}"
-    null
+    viewsFilePathPromise = @firstFileThatExists(pluralizedViewsPath, singularViewsPath)
+    viewsFilePathPromise.then (viewsPath) ->
+      if viewsPath
+        files = fs.readdir @fullPath viewsPath, (err, files) ->
+          if err
+            deffered.resolve(null)
+          else
+            for file in files
+              if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
+                deffered.resolve("#{viewsPath}/#{file}")
+            deffered.resolve(null)
+      else
+        deffered.resolve(null)
+
+    return deffered.promise
 
   # Given the model name and an action, returns the path for the
   # test file for it.
@@ -95,12 +111,19 @@ class FileInspector
   # Given two file paths, returns one that exists. The first one has priority
   # over the second one. If no file exists, return null
   @firstFileThatExists: (file1, file2) ->
-    if fs.existsSync(@fullPath(file1))
-      file1
-    else if fs.existsSync(@fullPath(file2))
-      file2
-    else
-      null
+    deffered = q.defer()
+    fullPathFile1 = @fullPath(file1)
+    fullPathFile2 = @fullPath(file2)
+    fs.exists fullPathFile1, (exists) ->
+      if exists
+        deffered.resolve(file1)
+      else
+        fs.exists fullPathFile2, (exists) ->
+          if exists
+            deffered.resolve(file2)
+          else
+            deffered.resolve(null)
+    return deffered.promise
 
   # This is the base method used to navigational purposes.
   # It returns the model name from the current file.
@@ -134,4 +157,7 @@ class FileInspector
 
   # Gives full path for a partial path on the open project
   @fullPath: (partialPath) ->
-    "#{atom.project.getPath()}/#{partialPath}"
+    if atom.project
+      "#{atom.project.getPath()}/#{partialPath}"
+    else
+      ""
