@@ -14,4 +14,6 @@ Tools for a happier Rails development
 ## TODO
 
 * Go to test
-* atom-vim support
+* From code:
+  * Go to partial
+  * Go to model
