@@ -64,15 +64,45 @@ describe "FileInspector", ->
           expect(filePath).toBe "app/views/users/legacy_rhtml.rhtml"
 
   describe "testFilePath", ->
-    describe "when test unit exists", ->
-      it "returns its path", ->
-        FileInspector.testFilePath("user", undefined).then (filePath) ->
-          expect(filePath).toBe "test/models/user_test.rb"
+    describe "when in a model", ->
+      describe "when test unit exists", ->
+        it "returns its path", ->
+          FileInspector.testFilePath("app/models/user.rb").then (filePath) ->
+            expect(filePath).toBe "test/models/user_test.rb"
 
-    describe "when spec exists", ->
-      it "returns its path", ->
-        FileInspector.testFilePath("rspec_model", undefined).then (filePath) ->
-          expect(filePath).toBe "spec/models/rspec_model_spec.rb"
+      describe "when spec exists", ->
+        it "returns its path", ->
+          FileInspector.testFilePath("app/models/rspec_model.rb").then (filePath) ->
+            expect(filePath).toBe "spec/models/rspec_model_spec.rb"
+
+    describe "when in a controller", ->
+      describe "when test unit exists", ->
+        it "returns its path", ->
+          FileInspector.testFilePath("app/controllers/users_controller.rb").then (filePath) ->
+            expect(filePath).toBe "test/controllers/users_controller_test.rb"
+
+      describe "when spec exists", ->
+        it "returns its path", ->
+          FileInspector.testFilePath("app/controllers/rspec_models_controller.rb").then (filePath) ->
+            expect(filePath).toBe "spec/controllers/rspec_models_controller_spec.rb"
+
+    describe "when in a helper", ->
+      describe "when test unit exists", ->
+        it "returns its path", ->
+          FileInspector.testFilePath("app/helpers/users_helper.rb").then (filePath) ->
+            expect(filePath).toBe "test/helpers/users_helper_test.rb"
+
+      describe "when spec exists", ->
+        it "returns its path", ->
+          FileInspector.testFilePath("app/helpers/rspec_models_helper.rb").then (filePath) ->
+            expect(filePath).toBe "spec/helpers/rspec_models_helper_spec.rb"
+
+    describe "when in a view", ->
+      describe "when spec exists", ->
+        it "returns its path", ->
+          FileInspector.testFilePath("app/views/rspec_models/show.html.erb").then (filePath) ->
+            expect(filePath).toBe "spec/views/rspec_models/show.html.erb_spec.rb"
+
 
     #TODO: We could use a better behaviour here.
     describe "when template does not exist", ->

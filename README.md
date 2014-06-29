@@ -13,7 +13,6 @@ Tools for a happier Rails development
 
 ## TODO
 
-* Go to test
 * From code:
   * Go to partial
   * Go to model

@@ -103,9 +103,17 @@ class FileInspector
 
   # Given the model name and an action, returns the path for the
   # test file for it.
-  @testFilePath: (model, action) ->
-    specFilePath = "spec/models/#{model}_spec.rb"
-    unitTestFilePath = "test/models/#{model}_test.rb"
+  @testFilePath: (sourceFilePath) ->
+    specFilePath = sourceFilePath
+      .replace(/^app/, "spec")
+      .replace(/erb/, "erb.rb")
+      .replace(/\.rb$/, "_spec.rb")
+    unitTestFilePath = sourceFilePath
+      .replace(/^app/, "test")
+      .replace(/erb/, "erb.rb")
+      .replace(/\.rb$/, "_test.rb")
+    console.log specFilePath
+
     return @firstFileThatExists(specFilePath, unitTestFilePath)
 
   # Given two file paths, returns one that exists. The first one has priority

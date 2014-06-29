@@ -15,25 +15,28 @@ class Navigation
 
   # Acordingly to the selected Editor and the file path function passed as
   # parameter, this method opens a new tab.
-  @goTo: (fileKind) ->
+  @goTo: (targetFileKind) ->
     editor = atom.workspace.getActiveEditor()
     return q.reject("No active editorade") unless editor
 
-    modelName = FileInspector.getModelName editor.getPath()
+    sourceFilePath = editor.getPath().replace(atom.project.getPath()+"/", "")
+    return q.reject("Editor has no path") unless editor.getPath()
+
+    modelName = FileInspector.getModelName sourceFilePath
     return q.reject("Can't find out model") unless modelName
 
+    testSubject = CodeInspector.getCurrentSubject
+
     actionName = Navigation.getActionName(editor)
-    if !actionName and fileKind == "view"
+    if !actionName and targetFileKind == "view"
       return q.reject("Don't know what action to use")
 
-    @getTargetFile(fileKind, modelName, actionName).then (targetFile)=>
-      testSubject = CodeInspector.getCurrentSubject
-
+    @getTargetFile(targetFileKind, modelName, actionName, sourceFilePath).then (targetFile) =>
       atom.workspaceView.open(targetFile).then (resultingEditor) =>
         CodeInspector.moveToSubject(resultingEditor, testSubject)
 
   # Gets the target file which will be switched to
-  @getTargetFile: (fileKind, modelName, actionName) ->
+  @getTargetFile: (fileKind, modelName, actionName, sourceFilePath) ->
     switch fileKind
       when "model"
         FileInspector.modelFilePath(modelName)
@@ -46,4 +49,4 @@ class Navigation
       when "view"
         FileInspector.viewFilePath(modelName, actionName)
       when "test"
-        FileInspector.testFilePath(modelName, actionName)
+        FileInspector.testFilePath(sourceFilePath)
