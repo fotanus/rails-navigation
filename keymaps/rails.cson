@@ -9,3 +9,10 @@
 # https://atom.io/docs/latest/advanced/keymaps
 '.workspace':
   'ctrl-alt-o': 'rails:toggle'
+
+'.editor.vim-mode.command-mode:not(.insert-mode)':
+  'g m': 'rails:go-to-model'
+  'g v': 'rails:go-to-view'
+  'g c': 'rails:go-to-controller'
+  'g s': 'rails:go-to-test'
+  'g h': 'rails:go-to-helper'
