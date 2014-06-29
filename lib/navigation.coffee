@@ -1,4 +1,3 @@
-AR = require './active-record'
 CodeInspector = require './code-inspector'
 FileInspector = require './file-inspector'
 fs = require 'fs'

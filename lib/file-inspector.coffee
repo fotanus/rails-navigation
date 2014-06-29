@@ -1,6 +1,6 @@
-AR = require './active-record'
 fs = require 'fs'
 q = require 'q'
+inflection = require 'inflection'
 
 # FileInspector class does inferences and can answer queries
 # related to rails file paths
@@ -49,13 +49,13 @@ class FileInspector
 
   # Given a model name, returns the file path for the respective controller
   @controllerFilePath: (model) ->
-    pluralFilePath = "app/controllers/#{AR.pluralize(model)}_controller.rb"
+    pluralFilePath = "app/controllers/#{inflection.pluralize(model)}_controller.rb"
     singularFilePath = "app/controllers/#{model}_controller.rb"
     @firstFileThatExists(pluralFilePath, singularFilePath)
 
   # Given a model name, returns the file path for the respective helper
   @helperFilePath: (model) ->
-    pluralFilePath = "app/helpers/#{AR.pluralize(model)}_helper.rb"
+    pluralFilePath = "app/helpers/#{inflection.pluralize(model)}_helper.rb"
     singularFilePath = "app/helpers/#{model}_helper.rb"
     @firstFileThatExists(pluralFilePath, singularFilePath)
 
@@ -68,7 +68,7 @@ class FileInspector
       if err
         deffered.resolve(null)
       else
-        pluralizedModel = AR.pluralize(model)
+        pluralizedModel = inflection.pluralize(model)
         bestFound = null
         for file in files
           if file.match new RegExp("[0-9]+_create_" + pluralizedModel + "\.rb")
@@ -82,7 +82,7 @@ class FileInspector
   # default view file for this action.
   @viewFilePath: (model, action) ->
     deffered = q.defer()
-    pluralizedModel = AR.pluralize(model)
+    pluralizedModel = inflection.pluralize(model)
     pluralizedViewsPath = "app/views/#{pluralizedModel}"
     singularViewsPath = "app/views/#{model}"
     viewsFilePathPromise = @firstFileThatExists(pluralizedViewsPath, singularViewsPath)
@@ -142,7 +142,7 @@ class FileInspector
 
     for regexp in regexps
       if match = file.match regexp
-        return AR.singularize(match[1])
+        return inflection.singularize(match[1])
 
   # When possible to define the action based on the file name, returns it.
   # Returns null otherwise.
