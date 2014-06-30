@@ -1,8 +1,8 @@
 {
-  "name": "rails",
-  "main": "./lib/rails",
+  "name": "rails-navigation",
+  "main": "./lib/rails-navigation",
   "version": "0.0.1",
-  "description": "Tools for a happier rails development",
+  "description": "Atom package to navigate on rails files quickly.",
   "activationEvents": [
     "rails:go-to-model",
     "rails:go-to-controller",
@@ -10,7 +10,7 @@
     "rails:go-to-migration",
     "rails:go-to-view"
   ],
-  "repository": "https://github.com/fotanus/rails",
+  "repository": "https://github.com/fotanus/rails-navigation",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
