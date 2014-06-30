@@ -1,11 +1,16 @@
 FileInspector = require "./file-inspector"
-# CodeInspector is responsible to respond to queries on the source code
 
+# CodeInspector parse the contents of an editor and change the textbuffer or
+# return information about the code around the cursor.
 module.exports =
 class CodeInspector
 
-  # If possible to known the action name based on the cursor location, returns
-  # it. Returns null otherwise.
+  # Public: Retrieves the method name which the cursor context currently is.
+  # It works for models, controllers and tests.
+  #
+  # editor - the editor we want to inspect
+  #
+  # Returns the method name or null.
   @getMethodName: (editor) ->
     textInLines = editor.getText().split("\n")
     lineNumber = editor.getCursor().getBufferRow()
@@ -15,8 +20,13 @@ class CodeInspector
       lineNumber -= 1
     null
 
-  # Given a editor and a subject, move the curent cursor to the subject. Subject
-  # currently needs to be a function name.
+  # Public: Move the cursor to the method definition (or test definition, or
+  # spec)
+  #
+  # editor - the editor that needs the cursor moved
+  # subject - the method name (or test base name) we want to get to
+  #
+  # Returns nothing.
   @moveToSubject: (editor, subject) ->
     textInLines = editor.getText().split("\n")
     lineNumber = 0;
@@ -27,8 +37,12 @@ class CodeInspector
         return
       lineNumber += 1
 
-  # Returns the method name. It works if the line is a method definition or a
-  # test method with that name
+  # Private: Returns the method name or test base name from one string.
+  #
+  # editor - the editor which have the line we need to analise
+  # line - the line we want to get the method name from
+  #
+  # Returns a method name, or null.
   @getMethodNameFromLine: (editor, line) ->
     path = editor.getPath()
     if FileInspector.isController(path) || FileInspector.isModel?(path)
@@ -40,24 +54,35 @@ class CodeInspector
     else
       null
 
-  # For a given line, if is a method declaration, returns the name. Otherwise,
-  # returns null
+  # Private: For a given method definition line, returns the method name.
+  #
+  # line - a line of code with a method definition.
+  #
+  # Returns the method name or null if can't find a method definition.
   @getMethodDefName: (line) ->
     if match = line.match /^\s*def\s\s*(\w+)/
       return match[1]
     else
       null
 
-  # For a given line, test if is the start of a test subject. Tests subjects
-  # have this format: `test "#method"` or `test ".method"`.
+  # Private: For a standard Unit::Test method description, gets the method name
+  # which the test description tests.
+  #
+  # line - a line of code with a method definition.
+  #
+  # Returns the method name or null if can't find a method definition.
   @getTestMethodName: (line) ->
     if match = line.match /^\s*test\s+("|')(#|\.)(\w+)("|')/
       return match[3]
     else
       null
 
-  # For a given line, test if is the start of a spec subject. Spec subjects
-  # have this format: `describe "#method"` or `describe ".method"`.
+  # Private: For a standard rspec method description, gets the method name which
+  # the spec description tests.
+  #
+  # line - a line of code with a method definition.
+  #
+  # Returns the method name or null if can't find a method definition.
   @getSpecMethodName: (line) ->
     if match = line.match /^\s*describe\s+("|')(#|\.)(\w+)("|')/
       return match[3]

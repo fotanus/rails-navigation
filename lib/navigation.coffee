@@ -3,18 +3,16 @@ FileInspector = require './file-inspector'
 fs = require 'fs'
 q = require 'q'
 
-# Navigation class contains methods used to navigate on
-# rails directory structure
-
+# Navigation class contains high-level methods that are binded on the main file.
 module.exports =
 class Navigation
 
-  # Given an editor, try to find an action name if in one applicable file.
-  @getActionName: (editor) ->
-    FileInspector.getActionName(editor) || CodeInspector.getMethodName(editor)
-
-  # Acordingly to the selected Editor and the file path function passed as
-  # parameter, this method opens a new tab.
+  # Public: Given a file kind, goes to it taking in consideration the current
+  # file.
+  #
+  # targetFileKind: A string for the target file. For example, "model" or "view"
+  #
+  # Returns nothing
   @goToFile: (targetFileKind) ->
     editor = atom.workspace.getActiveEditor()
     return q.reject("No active editorade") unless editor
@@ -35,7 +33,14 @@ class Navigation
       atom.workspaceView.open(targetFile).then (resultingEditor) ->
         CodeInspector.moveToSubject(resultingEditor, actionName)
 
-  # Gets the target file which will be switched to
+  # Private: for the given parameters, decide the target file
+  #
+  # fileKind - the target file kind that needs to be open
+  # modelName - the related model with the current file, singularized
+  # actionName - the related action for the current file
+  # sourceFilePath - the file that is current open
+  #
+  # Returns the promise of a file path
   @getTargetFile: (fileKind, modelName, actionName, sourceFilePath) ->
     switch fileKind
       when "model"
@@ -50,3 +55,11 @@ class Navigation
         FileInspector.viewFilePath(modelName, actionName)
       when "test"
         FileInspector.testFilePath(sourceFilePath)
+
+  # Private: gets the action for the given editor.
+  #
+  # editor - the editor we want to get the action from.
+  #
+  # Returns the action name
+  @getActionName: (editor) ->
+    FileInspector.getActionName(editor) || CodeInspector.getMethodName(editor)
