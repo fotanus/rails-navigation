@@ -17,6 +17,7 @@ class FileInspector
   helperFileMatcher = /\/helpers\/(\w+)_helper\.rb$/
   migrationCreateFileMatcher = /\/migrate\/[0-9]+_create_(\w+)\.rb$/
   migrationModifyFileMatcher = /\/migrate\/[0-9]+_add_\w+_to_(\w+)\.rb$/
+  mailerMatcher = /\/mailers\/(\w+).rb/
   factoryFileMatcher = /\/factories\/(\w+).rb/
 
   # Regular expressions that matches any test file
@@ -28,7 +29,7 @@ class FileInspector
   functionalTestFileMatcher = /test\/functional\/(\w+)_test\.rb/
 
   modelSpecMatcher = /spec\/models\/(\w+)_spec.rb/
-  controllerSpecMatcher = /spec\/controllers\/(\w+)_spec\.rb/
+  controllerSpecMatcher = /spec\/controllers\/(\w+)_controller_spec\.rb/
   viewSpecMatcher = /spec\/views\/(\w+)\/(\w+)\.\w+\.\w+_spec\.rb/
   mailerSpecMatcher = /spec\/mailers\/(\w+)_spec.rb/
   factoryMatcher = /factories\/(\w+)\.rb/
@@ -146,6 +147,9 @@ class FileInspector
       migrationModifyFileMatcher,
       modelSpecMatcher,
       controllerSpecMatcher,
+      viewSpecMatcher,
+      mailerSpecMatcher,
+      factoryMatcher,
     ]
 
     for regexp in regexps
