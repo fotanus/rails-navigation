@@ -15,7 +15,7 @@ class Navigation
 
   # Acordingly to the selected Editor and the file path function passed as
   # parameter, this method opens a new tab.
-  @goTo: (targetFileKind) ->
+  @goToFile: (targetFileKind) ->
     editor = atom.workspace.getActiveEditor()
     return q.reject("No active editorade") unless editor
 

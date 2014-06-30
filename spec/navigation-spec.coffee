@@ -46,7 +46,7 @@ describe "Navigation", ->
           editor = atom.workspace.getEditors()[0]
           expect(Navigation.getActionName(editor)).toBe null
 
-  describe "goTo", ->
+  describe "goToFile", ->
     describe "When controller is currently selected", ->
       beforeEach ->
         waitsForPromise ->
@@ -55,7 +55,7 @@ describe "Navigation", ->
       it "opens a new tab for the module", ->
         runs ->
           waitsForPromise ->
-            Navigation.goTo "model"
+            Navigation.goToFile "model"
         runs ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
@@ -69,7 +69,7 @@ describe "Navigation", ->
       it "opens a new tab for the controller", ->
         runs ->
           waitsForPromise ->
-            Navigation.goTo "controller"
+            Navigation.goToFile "controller"
         runs ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
@@ -78,7 +78,7 @@ describe "Navigation", ->
       it "opens a new tab for the test", ->
         runs ->
           waitsForPromise ->
-            Navigation.goTo "test"
+            Navigation.goToFile "test"
         runs ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
@@ -87,7 +87,7 @@ describe "Navigation", ->
       it "opens a new tab for the helper", ->
         runs ->
           waitsForPromise ->
-            Navigation.goTo "helper"
+            Navigation.goToFile "helper"
         runs ->
           currentPath = atom.workspace.getActiveEditor().getPath()
           expect(atom.workspace.getEditors().length).toEqual(2)
@@ -96,7 +96,7 @@ describe "Navigation", ->
     xdescribe "When there is no file open", ->
       it "fails", ->
         waitsForPromise {shouldReject: true}, =>
-          Navigation.goTo "controller"
+          Navigation.goToFile "controller"
 
     # TODO: Why this test won't pass?
     xdescribe "When can't decide the model", ->
@@ -108,4 +108,4 @@ describe "Navigation", ->
       it "fails", ->
         runs ->
           waitsForPromise {shouldReject: true}, ->
-            Navigation.goTo "controller"
+            Navigation.goToFile "controller"

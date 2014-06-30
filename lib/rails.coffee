@@ -12,19 +12,19 @@ module.exports =
     atom.workspaceView.command "rails:go-to-test", @goToTest
 
   goToModel: ->
-    Navigation.goTo "model"
+    Navigation.goToFile "model"
 
   goToController: ->
-    Navigation.goTo "controller"
+    Navigation.goToFile "controller"
 
   goToHelper: ->
-    Navigation.goTo "helper"
+    Navigation.goToFile "helper"
 
   goToMigration: ->
-    Navigation.goTo "migration"
+    Navigation.goToFile "migration"
 
   goToView: ->
-    Navigation.goTo "view"
+    Navigation.goToFile "view"
 
   goToTest: ->
-    Navigation.goTo "test"
+    Navigation.goToFile "test"
