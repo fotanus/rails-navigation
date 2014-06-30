@@ -10,7 +10,7 @@
     "rails:go-to-migration",
     "rails:go-to-view"
   ],
-  "repository": "https://github.com/fotanus/rails-navigation",
+  "repository": "https://github.com/strikingcode/rails-navigation",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
