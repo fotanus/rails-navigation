@@ -53,15 +53,20 @@ describe "FileInspector", ->
         expect(filePath).toBe "db/migrate/20140608214510_create_users.rb"
 
   describe "viewFilePath", ->
-    describe "when template exists", ->
-      it "returns the view file for the given model/action", ->
-        FileInspector.viewFilePath("user", "index").then (filePath) ->
-          expect(filePath).toBe "app/views/users/index.html.erb"
+    beforeEach ->
+      atom.workspaceView = new WorkspaceView()
+      atom.workspace = atom.workspaceView.model
+      atom.project.setPath("#{atom.project.getPath()}/test_project")
+      
+      describe "when template exists", ->
+        it "returns the view file for the given model/action", ->
+          FileInspector.viewFilePath("user", "index").then (filePath) ->
+            expect(filePath).toBe "app/views/users/index.html.erb"
 
-    describe "when old style template exists", ->
-      it "returns the view file for the given model/action", ->
-        FileInspector.viewFilePath("user", "legacy_rhtml").then (filePath) ->
-          expect(filePath).toBe "app/views/users/legacy_rhtml.rhtml"
+      describe "when old style template exists", ->
+        it "returns the view file for the given model/action", ->
+          FileInspector.viewFilePath("user", "legacy_rhtml").then (filePath) ->
+            expect(filePath).toBe "app/views/users/legacy_rhtml.rhtml"
 
   describe "testFilePath", ->
     describe "when in a model", ->

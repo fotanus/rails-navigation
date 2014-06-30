@@ -129,8 +129,11 @@ class FileInspector
     singularViewsPath = "app/views/#{model}"
     viewsFilePathPromise = @firstFileThatExists(pluralizedViewsPath, singularViewsPath)
     viewsFilePathPromise.then (viewsPath) ->
+      console.log viewsPath
+      console.log FileInspector.fullPath(viewsPath)
       fs.readdir FileInspector.fullPath(viewsPath)  , (err, files) ->
         if err
+          console.log(err)
           deffered.resolve(null)
         else
           for file in files
