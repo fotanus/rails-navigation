@@ -14,7 +14,7 @@ describe "Navigation", ->
       beforeEach ->
         runs ->
           waitsForPromise ->
-            atom.workspace.open("/app/views/users/index.html.erb")
+            atom.workspace.open("app/views/users/index.html.erb")
       it "gets the action from the filename", ->
         runs ->
           editor = atom.workspace.getEditors()[0]
@@ -24,16 +24,16 @@ describe "Navigation", ->
       beforeEach ->
         runs ->
           waitsForPromise ->
-            atom.workspace.open("/app/controllers/users_controller.rb")
+            atom.workspace.open("app/controllers/users_controller.rb")
 
       describe "When the cursor is on the index action", ->
+        beforeEach ->
+          editor = atom.workspace.getEditors()[0]
+          editor.setCursorBufferPosition([7,2])
         it "gets the action from code inspector", ->
           runs ->
-            spyOn(CodeInspector, 'controllerCurrentAction').andReturn(
-              'code_inspector_method'
-            )
             editor = atom.workspace.getEditors()[0]
-            expect(Navigation.getActionName(editor)).toBe "code_inspector_method"
+            expect(Navigation.getActionName(editor)).toBe "index"
 
 
     describe "When can't discover the action name", ->

@@ -9,7 +9,6 @@ describe "codeInspector", ->
       runs ->
         atom.workspaceView = new WorkspaceView()
         atom.workspace = atom.workspaceView.model
-        atom.workspace.open("dummy_controller.rb")
       waitsFor ->
         editor = atom.workspace.getEditors()[0]
 
@@ -48,36 +47,36 @@ describe "codeInspector", ->
             expect(CodeInspector.controllerCurrentAction(editor)).toBe null
 
 
-  describe "getMethodName", ->
+  describe "getMethodDefName", ->
     it "matches a method declaration line", ->
-      expect(CodeInspector.getMethodName("def foo_bar")).toBe "foo_bar"
+      expect(CodeInspector.getMethodDefName("def foo_bar")).toBe "foo_bar"
 
     it "don't match a non-method declaration line", ->
-      expect(CodeInspector.getMethodName("puts 'hello'")).toBe null
+      expect(CodeInspector.getMethodDefName("puts 'hello'")).toBe null
 
-  describe "getTestSubject", ->
+  describe "getTestMethodName", ->
     it "matches a instance method test description", ->
-      expect(CodeInspector.getTestSubject("test '#my_method'")).toBe "my_method"
+      expect(CodeInspector.getTestMethodName("test '#my_method'")).toBe "my_method"
 
     it "matches a instance method test description with double quotes", ->
-      expect(CodeInspector.getTestSubject('test "#my_method"')).toBe "my_method"
+      expect(CodeInspector.getTestMethodName('test "#my_method"')).toBe "my_method"
 
     it "matches a class method test description", ->
-      expect(CodeInspector.getTestSubject('test ".my_method"')).toBe "my_method"
+      expect(CodeInspector.getTestMethodName('test ".my_method"')).toBe "my_method"
 
     it "don't match a non-method declaration line", ->
-      expect(CodeInspector.getTestSubject("test 'any test'")).toBe null
+      expect(CodeInspector.getTestMethodName("test 'any test'")).toBe null
 
 
-  describe "getSpecSubject", ->
+  describe "getSpecMethodName", ->
     it "matches a instance method spec description", ->
-      expect(CodeInspector.getSpecSubject("describe '#my_method'")).toBe "my_method"
+      expect(CodeInspector.getSpecMethodName("describe '#my_method'")).toBe "my_method"
 
     it "matches a instance method spec description with double quotes", ->
-      expect(CodeInspector.getSpecSubject('describe "#my_method"')).toBe "my_method"
+      expect(CodeInspector.getSpecMethodName('describe "#my_method"')).toBe "my_method"
 
     it "matches a class method spec description", ->
-      expect(CodeInspector.getSpecSubject('describe ".my_method"')).toBe "my_method"
+      expect(CodeInspector.getSpecMethodName('describe ".my_method"')).toBe "my_method"
 
     it "don't match a non-method declaration line", ->
-      expect(CodeInspector.getSpecSubject("describe 'any spec'")).toBe null
+      expect(CodeInspector.getSpecMethodName("describe 'any spec'")).toBe null

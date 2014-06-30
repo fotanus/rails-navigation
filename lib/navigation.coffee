@@ -11,7 +11,7 @@ class Navigation
 
   # Given an editor, try to find an action name if in one applicable file.
   @getActionName: (editor) ->
-    FileInspector.getActionName(editor) || CodeInspector.getActionName(editor)
+    FileInspector.getActionName(editor) || CodeInspector.getMethodName(editor)
 
   # Acordingly to the selected Editor and the file path function passed as
   # parameter, this method opens a new tab.
@@ -31,9 +31,9 @@ class Navigation
     if !actionName and targetFileKind == "view"
       return q.reject("Don't know what action to use")
 
-    @getTargetFile(targetFileKind, modelName, actionName, sourceFilePath).then (targetFile) =>
-      atom.workspaceView.open(targetFile).then (resultingEditor) =>
-        CodeInspector.moveToSubject(resultingEditor, testSubject)
+    @getTargetFile(targetFileKind, modelName, actionName, sourceFilePath).then (targetFile) ->
+      atom.workspaceView.open(targetFile).then (resultingEditor) ->
+        CodeInspector.moveToSubject(resultingEditor, actionName)
 
   # Gets the target file which will be switched to
   @getTargetFile: (fileKind, modelName, actionName, sourceFilePath) ->

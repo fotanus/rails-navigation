@@ -43,6 +43,13 @@ class FileInspector
   @isTest: (file) ->
     Boolean(file.match(specFileMatcher) || file.match(testFileMatcher))
 
+  @isModel: (file) ->
+    Boolean(file.match(modelFileMatcher))
+
+  # Returns if the given path is from a spec file
+  @isSpec: (file) ->
+    Boolean(file.match(specFileMatcher))
+
   # Given a model name, returns the file path for that model.
   @modelFilePath: (model) ->
     q.fcall ->
@@ -113,7 +120,6 @@ class FileInspector
       .replace(/^app/, "test")
       .replace(/erb/, "erb.rb")
       .replace(/\.rb$/, "_test.rb")
-    console.log specFilePath
 
     return @firstFileThatExists(specFilePath, unitTestFilePath)
 
@@ -138,17 +144,18 @@ class FileInspector
   # It returns the model name from the current file.
   @getModelName: (file) ->
     regexps = [
-      modelFileMatcher,
-      controllerFileMatcher,
-      viewFileMatcher,
-      legacyViewFileMatcher,
-      helperFileMatcher,
-      migrationCreateFileMatcher,
-      migrationModifyFileMatcher,
       modelSpecMatcher,
       controllerSpecMatcher,
       viewSpecMatcher,
       mailerSpecMatcher,
+      modelFileMatcher,
+      controllerFileMatcher,
+      viewFileMatcher,
+      legacyViewFileMatcher,
+      mailerMatcher,
+      helperFileMatcher,
+      migrationCreateFileMatcher,
+      migrationModifyFileMatcher,
       factoryMatcher,
     ]
 
