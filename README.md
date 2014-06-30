@@ -33,3 +33,8 @@ On vim command mode, the keybindings are `g X`, where `X` is:
 ## Bugs and contributions
 
 are welcome. Thanks!
+
+## Alternatives
+
+* [atom-rails](https://github.com/tomkadwill/atom-rails): Aims to be a replacement for [vim-rails](https://github.com/tomkadwill/atom-rails), but currently support only navigational features.
+* [rails-transporter](https://github.com/hmatsuda/rails-transporter): A cool alternative using finder to complete views instead of open the current context.
