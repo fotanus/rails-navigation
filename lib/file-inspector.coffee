@@ -95,16 +95,13 @@ class FileInspector
     singularViewsPath = "app/views/#{model}"
     viewsFilePathPromise = @firstFileThatExists(pluralizedViewsPath, singularViewsPath)
     viewsFilePathPromise.then (viewsPath) ->
-      if viewsPath
-        files = fs.readdir @fullPath viewsPath, (err, files) ->
-          if err
-            deffered.resolve(null)
-          else
-            for file in files
-              if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
-                deffered.resolve("#{viewsPath}/#{file}")
-            deffered.resolve(null)
-      else
+      fs.readdir FileInspector.fullPath(viewsPath)  , (err, files) ->
+        if err
+          deffered.resolve(null)
+        else
+          for file in files
+            if file.match new RegExp(action + "\\.\\w+(\\.\\w+)?")
+              return deffered.resolve("#{viewsPath}/#{file}")
         deffered.resolve(null)
 
     return deffered.promise
