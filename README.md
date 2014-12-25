@@ -30,10 +30,6 @@ On vim command mode, the keybindings are `g X`, where `X` is:
 * `h` for helper
 * `s` for test (spec - `g t` is already used on vim-mode)
 
-## Bugs and contributions
-
-are welcome. Thanks!
-
 ## Alternatives
 
 * [atom-rails](https://github.com/tomkadwill/atom-rails): Aims to be a replacement for [vim-rails](https://github.com/tomkadwill/atom-rails), but currently support only navigational features.
