@@ -1,7 +1,7 @@
 {
   "name": "rails-navigation",
   "main": "./lib/rails-navigation",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Atom package to navigate through rails files.",
   "activationEvents": [
     "rails:go-to-model",
