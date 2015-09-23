@@ -3,13 +3,14 @@
   "main": "./lib/rails-navigation",
   "version": "0.2.0",
   "description": "Atom package to navigate through rails files.",
-  "activationEvents": [
-    "rails:go-to-model",
-    "rails:go-to-controller",
-    "rails:go-to-helper",
-    "rails:go-to-migration",
-    "rails:go-to-view"
-  ],
+  "activationCommands": {
+    "atom-text-editor": [ "rails:go-to-model",
+                          "rails:go-to-controller",
+                          "rails:go-to-helper",
+                          "rails:go-to-migration",
+                          "rails:go-to-view"
+                        ]
+  },
   "repository": "https://github.com/fotanus/rails-navigation",
   "license": "MIT",
   "engines": {
